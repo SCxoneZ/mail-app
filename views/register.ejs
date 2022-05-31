@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body class="m-2">
+  
+  <h2 class="text-center">Register Section</h2>
+  <% if(locals.registered){ %>
+    <div class="alert alert-success" role="alert">
+      Your account successfully registered, you can login now.
+    </div>
+  <% } %>
+  <% if(locals.error){ %>
+    <div class="alert alert-danger" role="alert">
+      Something Wrong, please enter the form properly!
+    </div>
+  <% } %>
+  <form method="post">
+    <div class="mb-3">
+      <label for="inputUsername" class="form-label">Username</label>
+      <input type="text" class="form-control" id="inputUsername" placeholder="Enter username..." name="username">
+    </div>
+    <div class="mb-3">
+      <label for="publicKey" class="form-label">Public Key (people will use this to send you a mail)</label>
+      <input type="text" class="form-control" id="inputPublicKey" placeholder="Enter whatever you want..." name="publicKey">
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input type="password" class="form-control" id="inputPassword" placeholder="Enter password..." name="password">
+    </div>
+    <button type="submit" class="btn btn-primary" name="registered">Register</button>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

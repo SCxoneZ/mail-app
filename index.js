@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const { index, sendMail, profile, checkMails, loginPage} = require("./controllers");
+//const { index, sendMail, profile, checkMails, loginPage, registerPage} = require("./controllers");
+const { get, post } = require("./controllers");
 const cookieParser = require("cookie-parser");
 
 const PORT = 3000;
@@ -12,20 +13,22 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  console.log(req.cookies);
-  if(!req.cookies.isLogin && req.path !== "/login"){
-    res.redirect("/login");
-  }
+  // console.log(req.cookies);
+  
   next();
 });
 
 app.set("view engine", "ejs");
 
-app.get("/", index);
-app.get("/send", sendMail);
-app.get("/profile", profile);
-app.get("/mails", checkMails);
-app.get("/login", loginPage);
+// GET
+app.get("/", get.index);
+app.get("/send", get.sendMail);
+app.get("/profile", get.profile);
+app.get("/mails", get.checkMails);
+app.get("/login", get.loginPage);
+app.get("/register", get.registerPage);
 
+// POST
+app.post("/register", post.registerPage);
 
 app.listen(PORT, () => console.log("Listening Now..."));
