@@ -9,6 +9,9 @@ const knex = require('knex')({
   }
 });
 
+const encrypt = require("./functions/encrypt");
+const getuser = require("./functions/getuser");
+
 const nav_links = [{
   link: "/",
   title: "Home"
@@ -20,11 +23,8 @@ const nav_links = [{
   {
     link: "/send",
     title: "Send Mail"
-  },
-  {
-    link: "/profile",
-    title: "Profile"
-  }];
+  }
+  ];
 
 
 module.exports = {
@@ -41,12 +41,6 @@ module.exports = {
         nav_links
       });
     },
-    profile: (req, res) => {
-      res.render("index", {
-        title: "Profile",
-        nav_links
-      });
-    },
     checkMails: (req, res) => {
       res.render("index", {
         title: "Check Mails",
@@ -54,9 +48,6 @@ module.exports = {
       });
     },
     loginPage: (req, res) => {
-      res.cookie('isLogin', 'yes', {
-        expires: new Date(Date.now() + 900000), httpOnly: true
-      })
       res.render("login", {
         title: "Login Section"
       });
@@ -75,14 +66,14 @@ module.exports = {
           username: req.body.username,
           profile: "",
           publicKey: req.body.publicKey,
-          password: req.body.password
+          password: encrypt(req.body.password)
         };
         knex('users').insert(data).then(() => {
           res.render("register", {
             title: "Register Section",
             registered: true
           });
-          })
+        })
         .catch((err) => {
           res.render("register", {
             title: "Register Section",
@@ -94,6 +85,58 @@ module.exports = {
           knex.destroy();
         });
       }
+    },
+    loginPage: (req, res) => {
+      knex("users")
+      .select("*")
+      .where("username", "=", req.body.username)
+      .then(rows => {
+        if (rows.length > 0) {
+
+          if (encrypt(req.body.password) == rows[0].password && req.body.username == rows[0].username) {
+            // set cookies for 1 month
+            res.cookie('key', encrypt(req.body.password), {
+              expires: new Date(Date.now() + 3600000 * (24*30)), httpOnly: true
+            });
+            res.cookie('username', req.body.username, {
+              expires: new Date(Date.now() + 3600000 * (24*30)), httpOnly: true
+            });
+            res.redirect("/");
+          } else {
+            res.render("login", {
+              title: "Login Section",
+              fail: true
+            });
+          }
+
+        } else {
+          res.render("login", {
+            title: "Login Section",
+            fail: true
+          });
+        }
+      });
     }
+  },
+  middleware: (req, res, next) => {
+    switch (req.path) {
+      case "/":
+      case "/send":
+      case "/profile":
+      case "/mails":
+        if (!req.cookies.key || !req.cookies.username) {
+          res.clearCookie("key");
+          res.clearCookie("username");
+          res.redirect("/login");
+        }
+        break;
+      case "/register":
+      case "/login":
+        if (req.cookies.key) {
+          res.redirect("/");
+        }
+        break;
+    }
+    next();
   }
 };
