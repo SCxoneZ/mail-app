@@ -23,8 +23,7 @@ const nav_links = [{
   {
     link: "/send",
     title: "Send Mail"
-  }
-  ];
+  }];
 
 
 module.exports = {
@@ -60,25 +59,37 @@ module.exports = {
   },
   post: {
     registerPage: (req, res) => {
-      if (req.body.username && req.body.publicKey && req.body.password) {
+      if (req.body.username && req.body.publicKey && req.body.password && req.files) {
+        const profile = req.files.profile;
+        const fileExtension = profile.name.split(".");
         const data = {
           id: 0,
           username: req.body.username,
-          profile: "",
+          profile: Date.now() + fileExtension[fileExtension.length-1],
           publicKey: req.body.publicKey,
           password: encrypt(req.body.password)
         };
         knex('users').insert(data).then(() => {
-          res.render("register", {
-            title: "Register Section",
-            registered: true
+          profile.mv(`./profiles/${profile.name}`, (err) => {
+            if (err) {
+              res.render("register", {
+                title: "Register Section",
+                error: true
+              });
+            }
           });
+          res.render("register",
+            {
+              title: "Register Section",
+              registered: true
+            });
         })
         .catch((err) => {
-          res.render("register", {
-            title: "Register Section",
-            error: true
-          });
+          res.render("register",
+            {
+              title: "Register Section",
+              error: true
+            });
           throw err
         })
         .finally(() => {
@@ -118,7 +129,9 @@ module.exports = {
       });
     }
   },
-  middleware: (req, res, next) => {
+  middleware: (req,
+    res,
+    next) => {
     switch (req.path) {
       case "/":
       case "/send":

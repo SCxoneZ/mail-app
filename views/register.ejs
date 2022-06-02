@@ -18,7 +18,7 @@
       Something Wrong, please enter the form properly!
     </div>
   <% } %>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="inputUsername" class="form-label">Username</label>
       <input type="text" class="form-control" id="inputUsername" placeholder="Enter username..." name="username">
@@ -26,6 +26,10 @@
     <div class="mb-3">
       <label for="publicKey" class="form-label">Public Key (people will use this to send you a mail)</label>
       <input type="text" class="form-control" id="inputPublicKey" placeholder="Enter whatever you want..." name="publicKey">
+    </div>
+    <div class="mb-3">
+      <label for="inputProfile" class="form-label">Input your profile picture here.</label>
+      <input class="form-control" type="file" id="inputProfile" name="profile">
     </div>
     <div class="mb-3">
       <label for="inputPassword" class="form-label">Password</label>

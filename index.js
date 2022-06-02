@@ -1,15 +1,16 @@
 const express = require("express");
+const fileupload = require("express-fileupload");
 const app = express();
 //const { index, sendMail, profile, checkMails, loginPage, registerPage} = require("./controllers");
 const { get, post, middleware } = require("./controllers");
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const PORT = 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileupload());
 app.use(cookieParser());
 
 app.set("view engine", "ejs");
@@ -27,4 +28,4 @@ app.get("/register", get.registerPage);
 app.post("/register", post.registerPage);
 app.post("/login", post.loginPage);
 
-app.listen(PORT, () => console.log("Listening Now..."));
+app.listen(PORT, () => console.log(`Listening to port ${PORT}...`));
