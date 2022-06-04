@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+
+  <%- include("components/navbar") %>
+  <% if (locals.succeed) {
+    %>
+    <div class="alert alert-success m-2" role="alert">
+      Succeed Send Mail ^_^
+    </div>
+    <%
+  } %>
+  <form class="m-2" method="post">
+    <div class="mb-3">
+      <label for="keyInput" class="form-label">Public Key: </label>
+      <input type="text" class="form-control" id="keyInput" placeholder="Receiver's public key..." name="toKey">
+    </div>
+    <div class="form-floating">
+      <textarea class="form-control" placeholder="Your message goes here" id="content" style="height: 300px" name="content"></textarea>
+      <label for="content" style="color: #a5a5a5;">Message</label>
+    </div>
+    <button type="submit" class="btn btn-primary my-3">Submit</button>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

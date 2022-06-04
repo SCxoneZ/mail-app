@@ -21,11 +21,11 @@
   <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="inputUsername" class="form-label">Username</label>
-      <input type="text" class="form-control" id="inputUsername" placeholder="Enter username..." name="username">
+      <input type="text" class="form-control" id="inputUsername" placeholder="Enter username..." name="username" autocomplete="off">
     </div>
     <div class="mb-3">
       <label for="publicKey" class="form-label">Public Key (people will use this to send you a mail)</label>
-      <input type="text" class="form-control" id="inputPublicKey" placeholder="Enter whatever you want..." name="publicKey">
+      <input type="text" class="form-control" id="inputPublicKey" placeholder="Enter whatever you want..." name="publicKey" autocomplete="off">
     </div>
     <div class="mb-3">
       <label for="inputProfile" class="form-label">Input your profile picture here.</label>
@@ -33,7 +33,7 @@
     </div>
     <div class="mb-3">
       <label for="inputPassword" class="form-label">Password</label>
-      <input type="password" class="form-control" id="inputPassword" placeholder="Enter password..." name="password">
+      <input type="password" class="form-control" id="inputPassword" placeholder="Enter password..." name="password" autocomplete="off">
     </div>
     <p>Already have an account? <a href="/login">Login</a></p>
     <button type="submit" class="btn btn-primary" name="registered">Register</button>

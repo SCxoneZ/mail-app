@@ -28,30 +28,33 @@ const nav_links = [{
 
 module.exports = {
   get: {
-    index: (req, res) => {
+    index: async (req, res) => {
       res.render("index", {
         title: "Home",
-        nav_links
+        nav_links,
+        user: await getuser(req.cookies.username, req.cookies.key)
       });
     },
-    sendMail: (req, res) => {
-      res.render("index", {
+    sendMail: async (req, res) => {
+      res.render("send", {
         title: "Send Mail",
-        nav_links
+        nav_links,
+        user: await getuser(req.cookies.username, req.cookies.key)
       });
     },
-    checkMails: (req, res) => {
+    checkMails: async (req, res) => {
       res.render("index", {
         title: "Check Mails",
-        nav_links
+        nav_links,
+        user: await getuser(req.cookies.username, req.cookies.key)
       });
     },
-    loginPage: (req, res) => {
+    loginPage: async (req, res) => {
       res.render("login", {
         title: "Login Section"
       });
     },
-    registerPage: (req, res) => {
+    registerPage: async (req, res) => {
       res.render("register", {
         title: "Register Section"
       });
@@ -59,18 +62,18 @@ module.exports = {
   },
   post: {
     registerPage: (req, res) => {
-      if (req.body.username && req.body.publicKey && req.body.password && req.files) {
-        const profile = req.files.profile;
-        const fileExtension = profile.name.split(".");
+      if (req.body.username && req.body.publicKey && req.body.password && req.files.profile) {
+        const fileExtension = req.files.profile.name.split(".");
+        req.files.profile.name = Date.now() + "." + fileExtension[fileExtension.length-1];
         const data = {
           id: 0,
           username: req.body.username,
-          profile: Date.now() + fileExtension[fileExtension.length-1],
+          profile: req.files.profile.name,
           publicKey: req.body.publicKey,
           password: encrypt(req.body.password)
         };
         knex('users').insert(data).then(() => {
-          profile.mv(`./profiles/${profile.name}`, (err) => {
+          req.files.profile.mv(`./profiles/${req.files.profile.name}`, (err) => {
             if (err) {
               res.render("register", {
                 title: "Register Section",
@@ -127,6 +130,26 @@ module.exports = {
           });
         }
       });
+    },
+    send: async (req, res) => {
+      const user = await getuser(req.cookies.username, req.cookies.password);
+      const date = new Date();
+      knex("mails").insert({
+        mailId: 0,
+        fromUsername: user[0].username,
+        fromKey: user[0].publicKey,
+        toKey: req.body.toKey,
+        content: req.body.content,
+        time: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} | ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      })
+      .then(rows => {
+        res.render("send", {
+          title: "Send Mail",
+          nav_links,
+          succeed: true,
+          user
+        });
+      })
     }
   },
   middleware: (req,

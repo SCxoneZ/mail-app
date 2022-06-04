@@ -1,0 +1,13 @@
+<div class="card my-3 mx-auto bg-dark text-white mt-5 shadow" style="width: 18rem;">
+  <div class="card-body text-center">
+    <img src="/profiles/<%= user[0].profile %>" class="shadow rounded mx-auto d-block mb-4" alt="..." width="100" height="100">
+    <h5 class="card-subtitle mb-2">Username: <%= user[0].username %></h5>
+    <h5 class="card-subtitle mb-2">Public Key: <%= user[0].publicKey %></h5>
+    <div class="btn-wrapper d-flex flex-column justify-content-center">
+      <button type="button" class="btn btn-warning px-4 m-1">Edit Profile</button>
+      <button type="button" class="btn btn-info px-4 m-1">Send Mail</button>
+      <button type="button" class="btn btn-success px-4 m-1">Check Mails</button>
+      <button type="button" class="btn btn-danger px-4 m-1">Logout</button>
+    </div>
+  </div>
+</div>
